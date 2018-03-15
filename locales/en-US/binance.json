@@ -1,0 +1,24 @@
+{
+    "binance": {
+        "label": {
+            "credentials": "Credentials",
+            "apiKey": "API key",
+            "apiSecret": "API secret",
+            "interval": "Time interval",
+            "startTime": "Start time",
+            "endTime": "End time",
+            "limit": "Limit"
+        },
+        "placeholder": {
+            "startTime": "Start time (optional)",
+            "endTime": "End time (optional)",
+            "limit": "Number of items to return (max: 500)"
+        },
+        "errors": {
+            "missing-conf": "Missing binance credentials configuration",
+            "missing-ticker": "Please specify ticker pair in msg topic (i.e. BNBBTC)",
+            "missing-ticker-status": "Missing ticker pair",
+            "invalid-api-cred": "Invalid API credentials"
+        }
+    }
+}

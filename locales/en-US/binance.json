@@ -7,17 +7,33 @@
             "interval": "Time interval",
             "startTime": "Start time",
             "endTime": "End time",
-            "limit": "Limit"
+            "limit": "Limit",
+            "ticker": "Ticker pair",
+            "orderId": "Order ID",
+            "quantity": "Quantity",
+            "price": "Price",
+            "orderType": "Order Type"
         },
         "placeholder": {
             "startTime": "Start time (optional)",
             "endTime": "End time (optional)",
-            "limit": "Number of items to return (max: 500)"
+            "limit": "Number of items to return (max: 500)",
+            "ticker": "Ticker pair (i.e. BNBBTC)",
+            "quantity": "Quantity/amount",
+            "price": "Price"
         },
         "errors": {
             "missing-conf": "Missing binance credentials configuration",
             "missing-ticker": "Please specify ticker pair in msg topic (i.e. BNBBTC)",
             "missing-ticker-status": "Missing ticker pair",
+            "missing-interval": "Missing time interval selection",
+            "missing-order-id": "Missing order ID",
+            "missing-quantity": "Missing quantity",
+            "quantity-not-a-number": "Quantity supplied is not a number",
+            "price-not-a-number": "Price supplied is not a number",
+            "missing-price": "Missing price",
+            "invalid-order-type": "Invalid Order Type (Options: 'LIMIT', 'MARKET')",
+            "invalid-order-type-status": "Invalid Order Type",
             "invalid-api-cred": "Invalid API credentials"
         }
     }

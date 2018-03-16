@@ -66,6 +66,10 @@
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-price">
@@ -76,14 +80,19 @@
   RED.nodes.registerType('binance-get-price', {
     category: 'function',
     defaults: {
-      name: {value: ""}
+      name: {value: ""},
+      ticker: {value: ""}
     },
     icon: "binance.png",
     color: "#f3ba2e",
     inputs: 1,
     outputs: 1,
     label: function () {
-      return this.name || "getPrice";
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ? "getPrice: "+this.ticker: "getPrice";
+      }
     }
   });
 </script>
@@ -92,19 +101,19 @@
   BINANCE GET ALL PRICE NODE 
 ============================= --> 
 
-<script type="text/x-red" data-template-name="binance-get-all-price">
+<script type="text/x-red" data-template-name="binance-get-all-prices">
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
 </script>
 
-<script type="text/x-red" data-help-name="binance-get-all-price">
+<script type="text/x-red" data-help-name="binance-get-all-prices">
   <p>TODO</p>
 </script>
 
 <script type="text/javascript">
-  RED.nodes.registerType('binance-get-all-price', {
+  RED.nodes.registerType('binance-get-all-prices', {
     category: 'function',
     defaults: {
       name: {value: ""}
@@ -120,42 +129,6 @@
 </script>
 
 <!-- =============================
-  BINANCE GET BALANCE NODE 
-============================= --> 
-
-<script type="text/x-red" data-template-name="binance-get-balance">
-  <div class="form-row" id="binance-config-row">
-    <label for="node-input-binance"><i class="fa fa-key"></i> <span data-i18n="binance.label.credentials"></span></label>
-    <input type="text" id="node-input-binance">
-  </div>
-  <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
-    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
-  </div>
-</script>
-
-<script type="text/x-red" data-help-name="binance-get-balance">
-  <p>TODO</p>
-</script>
-
-<script type="text/javascript">
-  RED.nodes.registerType('binance-get-balance', {
-    category: 'function',
-    defaults: {
-      name: {value: ""},
-      binance: {type: "binance-credentials", validate: validateBinanceNode},
-    },
-    icon: "binance.png",
-    color: "#f3ba2e",
-    inputs: 1,
-    outputs: 1,
-    label: function () {
-      return this.name || "getBalance";
-    }
-  });
-</script>
-
-<!-- =============================
   BINANCE GET BOOK TICKER NODE 
 ============================= --> 
 
@@ -163,6 +136,10 @@
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
   </div>
 </script>
 
@@ -174,14 +151,19 @@
   RED.nodes.registerType('binance-get-book-ticker', {
     category: 'function',
     defaults: {
-      name: {value: ""}
+      name: {value: ""},
+      ticker: {value: ""}
     },
     icon: "binance.png",
     color: "#f3ba2e",
     inputs: 1,
     outputs: 1,
     label: function () {
-      return this.name || "getBookTicker";
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ? "getBookTicker: "+this.ticker: "getBookTicker";
+      }
     }
   });
 </script>
@@ -196,6 +178,10 @@
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-day-stats">
@@ -206,14 +192,19 @@
   RED.nodes.registerType('binance-get-day-stats', {
     category: 'function',
     defaults: {
-      name: {value: ""}
+      name: {value: ""},
+      ticker: {value: ""}
     },
     icon: "binance.png",
     color: "#f3ba2e",
     inputs: 1,
     outputs: 1,
     label: function () {
-      return this.name || "getDayStats";
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ? "getDayStats: "+this.ticker: "getDayStats";
+      }
     }
   });
 </script>
@@ -226,6 +217,10 @@
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
   </div>
   <div class="form-row">
     <label for="node-input-interval"><i class="fa fa-clock-o"></i> <span data-i18n="binance.label.interval"></span></label>
@@ -269,6 +264,7 @@
     category: 'function',
     defaults: {
       name: {value: ""},
+      ticker: {value: ""},
       interval: {value: "1d", required: true},
       limit: {value: 100, validate: function (v) {
         try {
@@ -310,7 +306,336 @@
       });
     },
     label: function () {
-      return this.name || "getCandlesticks";
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ? "getCandlesticks: "+this.ticker: "getCandlesticks";
+      }    
+    }
+  });
+</script>
+
+<!-- =============================
+  BINANCE GET BALANCE NODE 
+============================= --> 
+
+<script type="text/x-red" data-template-name="binance-get-balance">
+  <div class="form-row" id="binance-config-row">
+    <label for="node-input-binance"><i class="fa fa-key"></i> <span data-i18n="binance.label.credentials"></span></label>
+    <input type="text" id="node-input-binance">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="binance-get-balance">
+  <p>TODO</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('binance-get-balance', {
+    category: 'function',
+    defaults: {
+      name: {value: ""},
+      binance: {type: "binance-credentials", validate: validateBinanceNode},
+    },
+    icon: "binance.png",
+    color: "#f3ba2b",
+    inputs: 1,
+    outputs: 1,
+    label: function () {
+      return this.name || "getBalance";
+    }
+  });
+</script>
+
+<!-- =============================
+  BINANCE GET ORDERS NODE
+============================= --> 
+
+<script type="text/x-red" data-template-name="binance-get-orders">
+  <div class="form-row" id="binance-config-row">
+    <label for="node-input-binance"><i class="fa fa-key"></i> <span data-i18n="binance.label.credentials"></span></label>
+    <input type="text" id="node-input-binance">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="binance-get-orders">
+  <p>TODO</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('binance-get-orders', {
+    category: 'function',
+    defaults: {
+      binance: {type: "binance-credentials", validate: validateBinanceNode},
+      name: {value: ""},
+      ticker: {value: ""}
+    },
+    icon: "binance.png",
+    color: "#f3ba2b",
+    inputs: 1,
+    outputs: 1,
+    label: function () {
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ? "getOrders: "+this.ticker: "getOrders";
+      }
+    }
+  });
+</script>
+
+<!-- =============================
+  BINANCE CANCEL ORDERS NODE
+============================= --> 
+
+<script type="text/x-red" data-template-name="binance-cancel-orders">
+  <div class="form-row" id="binance-config-row">
+    <label for="node-input-binance"><i class="fa fa-key"></i> <span data-i18n="binance.label.credentials"></span></label>
+    <input type="text" id="node-input-binance">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="binance-cancel-orders">
+  <p>TODO</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('binance-cancel-orders', {
+    category: 'function',
+    defaults: {
+      binance: {type: "binance-credentials", validate: validateBinanceNode},
+      name: {value: ""},
+      ticker: {value: ""}
+    },
+    icon: "binance.png",
+    color: "#f3ba2b",
+    inputs: 1,
+    outputs: 1,
+    label: function () {
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ? "cancelOrders: "+this.ticker: "cancelOrders";
+      }
+    }
+  });
+</script>
+
+<!-- =============================
+  BINANCE GET TRADE HISTORY
+============================= --> 
+
+<script type="text/x-red" data-template-name="binance-get-trade-history">
+  <div class="form-row" id="binance-config-row">
+    <label for="node-input-binance"><i class="fa fa-key"></i> <span data-i18n="binance.label.credentials"></span></label>
+    <input type="text" id="node-input-binance">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="binance-get-trade-history">
+  <p>TODO</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('binance-get-trade-history', {
+    category: 'function',
+    defaults: {
+      binance: {type: "binance-credentials", validate: validateBinanceNode},
+      name: {value: ""},
+      ticker: {value: ""}
+    },
+    icon: "binance.png",
+    color: "#f3ba2b",
+    inputs: 1,
+    outputs: 1,
+    label: function () {
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ? "getTradeHistory: "+this.ticker: "getTradeHistory";
+      }
+    }
+  });
+</script>
+
+<!-- =============================
+  BINANCE BUY
+============================= --> 
+
+<script type="text/x-red" data-template-name="binance-buy">
+  <div class="form-row" id="binance-config-row">
+    <label for="node-input-binance"><i class="fa fa-key"></i> <span data-i18n="binance.label.credentials"></span></label>
+    <input type="text" id="node-input-binance">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
+  </div>
+  <div class="form-row">
+    <label for="node-input-orderType"><i class="fa fa-gear"></i> <span data-i18n="binance.label.orderType"></span></label>
+    <select id="node-input-orderType">
+      <option value="LIMIT" selected>LIMIT</option>
+      <option value="MARKET">MARKET</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-quantity"><i class="fa fa-hashtag"></i> <span data-i18n="binance.label.quantity"></span></label>
+    <input type="text" id="node-input-quantity" data-i18n="[placeholder]binance.placeholder.quantity">
+  </div>
+  <div class="form-row">
+    <label for="node-input-price"><i class="fa fa-money"></i> <span data-i18n="binance.label.price"></span></label>
+    <input type="text" id="node-input-price" data-i18n="[placeholder]binance.placeholder.price">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="binance-buy">
+  <p>TODO</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('binance-buy', {
+    category: 'function',
+    defaults: {
+      binance: {type: "binance-credentials", validate: validateBinanceNode},
+      name: {value: ""},
+      ticker: {value: ""},
+      orderType: {value: "LIMIT", required: true, validate: function (v) {
+        // hijacking the validate callback of order type to update dom to hide 
+        // price input when the "MARKET" order type is selected
+        if (v === "MARKET") {
+          $("#node-input-price").val("");
+          $("#node-input-price").attr("disabled", "disabled");
+        } else {
+          $("#node-input-price").attr("disabled", false);
+        }
+        return true;
+      }},
+      quantity: {value: "", validate: function (v) {
+        return RED.validators.number()(v) || v === ""; // number or blank
+      }},
+      price: {value: "", validate: function (v) {
+        return RED.validators.number()(v) || v === ""; // number or blank
+      }},
+    },
+    icon: "binance.png",
+    color: "#f3ba2b",
+    inputs: 1,
+    outputs: 1,
+    label: function () {
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ? this.orderType+" buy: "+this.ticker: this.orderType+" buy";
+      }
+    }
+  });
+</script>
+
+<!-- =============================
+  BINANCE SELL
+============================= --> 
+
+<script type="text/x-red" data-template-name="binance-sell">
+  <div class="form-row" id="binance-config-row">
+    <label for="node-input-binance"><i class="fa fa-key"></i> <span data-i18n="binance.label.credentials"></span></label>
+    <input type="text" id="node-input-binance">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-ticker"><i class="fa fa-star"></i> <span data-i18n="binance.label.ticker"></span></label>
+    <input type="text" id="node-input-ticker" data-i18n="[placeholder]binance.placeholder.ticker">
+  </div>
+  <div class="form-row">
+    <label for="node-input-orderType"><i class="fa fa-gear"></i> <span data-i18n="binance.label.orderType"></span></label>
+    <select id="node-input-orderType">
+      <option value="LIMIT" selected>LIMIT</option>
+      <option value="MARKET">MARKET</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-quantity"><i class="fa fa-hashtag"></i> <span data-i18n="binance.label.quantity"></span></label>
+    <input type="text" id="node-input-quantity" data-i18n="[placeholder]binance.placeholder.quantity">
+  </div>
+  <div class="form-row">
+    <label for="node-input-price"><i class="fa fa-money"></i> <span data-i18n="binance.label.price"></span></label>
+    <input type="text" id="node-input-price" data-i18n="[placeholder]binance.placeholder.price">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="binance-sell">
+  <p>TODO</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('binance-sell', {
+    category: 'function',
+    defaults: {
+      binance: {type: "binance-credentials", validate: validateBinanceNode},
+      name: {value: ""},
+      ticker: {value: ""},
+      orderType: {value: "LIMIT", required: true, validate: function (v) {
+        // hijacking the validate callback of order type to update dom to hide 
+        // price input when the "MARKET" order type is selected
+        if (v === "MARKET") {
+          $("#node-input-price").val("");
+          $("#node-input-price").attr("disabled", "disabled");
+        } else {
+          $("#node-input-price").attr("disabled", false);
+        }
+        return true;
+      }},
+      quantity: {value: "", validate: function (v) {
+        return RED.validators.number()(v) || v === ""; // number or blank
+      }},
+      price: {value: "", validate: function (v) {
+        return RED.validators.number()(v) || v === ""; // number or blank
+      }},
+    },
+    icon: "binance.png",
+    color: "#f3ba2b",
+    inputs: 1,
+    outputs: 1,
+    label: function () {
+      if (this.name) {
+        return this.name;
+      } else {
+        return this.ticker ?  this.orderType+" sell: "+this.ticker: this.orderType+" sell";
+      }
     }
   });
 </script>

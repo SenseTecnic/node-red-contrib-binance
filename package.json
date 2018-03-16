@@ -16,7 +16,9 @@
     "binance"
   ],
   "contributors": [
-    {"name": "Ted Huang"}
+    {
+      "name": "Ted Huang"
+    }
   ],
   "license": "Apache-2",
   "bugs": {

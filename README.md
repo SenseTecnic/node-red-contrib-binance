@@ -15,11 +15,11 @@ Nodes supported are a subset of the available functions in the API
 
 Getting latest price of a symbol.
 
-**Input:**
+Input:
 
 - tickerPair - *required*
 
-**Output:**
+Output:
 
 - current price
 
@@ -28,11 +28,11 @@ Getting latest price of a symbol.
 
 Getting latest price of all symbols.
 
-**Input:**
+Input:
 
 - none
 
-**Output:**
+Output:
 
 - {object} map of all available ticker pair and their current prices
 
@@ -40,11 +40,11 @@ Getting latest price of all symbols.
 
 Getting bid/ask prices for a symbol.
 
-**Input:**
+Input:
 
 - tickerPair - *required*
 
-**Output:**
+Output:
 
 - {object} info on latest book price
 
@@ -52,11 +52,11 @@ Getting bid/ask prices for a symbol.
 
 Get 24hr ticker price change statistics for a symbol.
 
-**Input:**
+Input:
 
 - tickerPair - *required*
 
-**Output:**
+Output:
 
 - {object} info latest 24 hour stats
 
@@ -64,14 +64,14 @@ Get 24hr ticker price change statistics for a symbol.
 
 Get Kline/candlestick data for a symbol.
 
-**Input:**
+Input:
 
 - tickerPair - *required*
 - time interval
 - start time
 - end time
 
-**Output:**
+Output:
 
 - {array} candlesticks/kline data specified by parameters
 
@@ -103,12 +103,12 @@ i.e.
 
 Get open orders for a symbol.
 
-**Input:**
+Input:
 
 - API credentials - *required*
 - tickerPair - *required*
 
-**Output:**
+Output:
 
 - {Array} list of current orders
 
@@ -116,12 +116,12 @@ Get open orders for a symbol.
 
 Get list of current balances.
 
-**Input:**
+Input:
 
 - API credentials - *required*
 - tickerPair - *required*
 
-**Output:**
+Output:
 
 - {object} map of ticker symbols and quantity on the account
 
@@ -129,12 +129,12 @@ Get list of current balances.
 
 Cancel all open orders of a ticker pair.
 
-**Input:**
+Input:
 
 - API credentials - *required*
 - tickerPair - *required*
 
-**Output:**
+Output:
 
 - {object} binance API response
 
@@ -142,12 +142,12 @@ Cancel all open orders of a ticker pair.
 
 Get trade history of a ticker pair.
 
-**Input:**
+Input:
 
 - API credentials - *required*
 - tickerPair - *required*
 
-**Output:**
+Output:
 
 - {array} list of previous orders
 
@@ -155,7 +155,7 @@ Get trade history of a ticker pair.
 
 Create a limit or market buy order.
 
-**Input:**
+Input:
 
 - API credentials - *required*
 - tickerPair - *required*
@@ -163,7 +163,7 @@ Create a limit or market buy order.
 - quantity - *required*
 - price - *required*
 
-**Output:**
+Output:
 
 - {object} binance API response
 
@@ -171,7 +171,7 @@ Create a limit or market buy order.
 
 Create a limit or market sell order.
 
-**Input:**
+Input:
 
 - API credentials - *required*
 - tickerPair - *required*
@@ -179,7 +179,7 @@ Create a limit or market sell order.
 - quantity - *required*
 - price - *required*
 
-**Output:**
+Output:
 
 - {object} binance API response
 

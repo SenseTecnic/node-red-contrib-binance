@@ -276,7 +276,7 @@
       }},
       startTime: {value: "", validate: function (v) {
         var endTime = $("#node-input-endTime").val();
-        if (endTime) { // start time has to be less than end time
+        if (endTime && v) { // start time has to be less than end time
           return new Date(v) < new Date(endTime); 
         } else {
           return true;
@@ -284,7 +284,7 @@
       }}, 
       endTime: {value: "", validate: function (v) {
         var startTime = $("#node-input-startTime").val();
-        if (startTime) { // end time has to be greater than start time
+        if (startTime && v) { // end time has to be greater than start time
           return new Date(v) > new Date(startTime);
         } else {
           return true;

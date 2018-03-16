@@ -70,32 +70,28 @@ function validateOrderFields(RED, node, tickerPair, orderType, quantity, price) 
   return true;
 }
 
+// Update api credentials and sync server time
+// note: syncing to exchange server time is async so we need a callback
+function updateBinanceConfig(node, callback) {
+  node.binance.options({
+    APIKEY: node.credentials.apiKey,
+    APISECRET: node.credentials.apiSecret,
+    useServerTime: true,
+    test: false
+  }, callback);
+}
+
 module.exports = function (RED) {
 
   function BinanceNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
-    node.binance = require('node-binance-api');;
+    node.status({});
+    node.binance = require('node-binance-api');
 
-    if (node.credentials &&
-        node.credentials.apiKey && node.credentials.apiSecret) {
-      try {
-        console.log('init binance')
-        node.binance.options({
-          APIKEY: node.credentials.apiKey,
-          APISECRET: node.credentials.apiSecret,
-          useServerTime: true,
-          test: false
-        });
-      } catch (err) {
-        if (err.message === "apiRequest: Invalid API Key") {
-          node.error(RED._("binance.errors.invalid-api-cred"));
-        } else {
-          throw err;
-        }
-      }
-    } else {
-      console.log("API credentials not loaded");
+    if (!node.credentials ||
+        !node.credentials.apiKey || !node.credentials.apiSecret) {
+      console.error("Missing binance API credentials");
       node.error(RED._("binance.errors.missing-conf"));
     }
   }
@@ -103,7 +99,8 @@ module.exports = function (RED) {
   function getPriceNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
-    node.binance = require('node-binance-api');
+    node.status({});
+    var binance = require('node-binance-api');
     node.ticker = n.ticker;
 
     node.on('input', function (msg) {
@@ -116,7 +113,7 @@ module.exports = function (RED) {
       var tickerPair = node.ticker || msg.topic;
       tickerPair = tickerPair.toUpperCase();
 
-      node.binance.prices(tickerPair, function (err, ticker) {
+      binance.prices(tickerPair, function (err, ticker) {
         if (err) {
           var errorMsg = parseApiError(err);
           node.error(errorMsg);
@@ -133,10 +130,11 @@ module.exports = function (RED) {
   function getAllPricesNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
-    node.binance = require('node-binance-api');
+    node.status({});
+    var binance = require('node-binance-api');
 
     node.on('input', function (msg) {
-      node.binance.prices(function (err, tickers) {
+      binance.prices(function (err, tickers) {
         if (err) {
           var errorMsg = parseApiError(err);
           node.error(errorMsg);
@@ -153,7 +151,8 @@ module.exports = function (RED) {
   function getBookTickerNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
-    node.binance = require('node-binance-api');
+    node.status({});
+    var binance = require('node-binance-api');
     node.ticker = n.ticker;
 
     node.on('input', function (msg) {
@@ -166,7 +165,7 @@ module.exports = function (RED) {
       var tickerPair = node.ticker || msg.topic;
       tickerPair = tickerPair.toUpperCase();
 
-      node.binance.bookTickers(tickerPair, function (err, ticker) {
+      binance.bookTickers(tickerPair, function (err, ticker) {
         if (err) {
           var errorMsg = parseApiError(err);
           node.error(errorMsg);
@@ -183,7 +182,8 @@ module.exports = function (RED) {
   function getDayStatsNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
-    node.binance = require('node-binance-api');
+    node.status({});
+    var binance = require('node-binance-api');
     node.ticker = n.ticker;
 
     node.on('input', function (msg) {
@@ -191,7 +191,7 @@ module.exports = function (RED) {
       var tickerPair = node.ticker || msg.topic;
       tickerPair = tickerPair ? tickerPair.toUpperCase(): false;
 
-      node.binance.prevDay(tickerPair, function (err, ticker) {
+      binance.prevDay(tickerPair, function (err, ticker) {
         if (err) {
           var errorMsg = parseApiError(err);
           node.error(errorMsg);
@@ -208,7 +208,8 @@ module.exports = function (RED) {
   function getCandleSticksNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
-    node.binance = require('node-binance-api');
+    node.status({});
+    var binance = require('node-binance-api');
     node.ticker = n.ticker;
     node.interval = n.interval;
     node.limit = n.limit;
@@ -237,7 +238,7 @@ module.exports = function (RED) {
       options.endTime = node.endTime ? (new Date(node.endTime)).getTime(): undefined;
       options.limit = node.limit ? node.limit: undefined;
 
-      node.binance.candlesticks(tickerPair, node.interval, function (err, ticker) {
+      binance.candlesticks(tickerPair, node.interval, function (err, ticker) {
         if (err) {
           var errorMsg = parseApiError(err);
           node.error(errorMsg);
@@ -255,24 +256,28 @@ module.exports = function (RED) {
   function getBalanceNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
+    node.status({});
     node.binance = RED.nodes.getNode(n.binance);
-    node.binance = node.binance ? node.binance.binance: null;
 
     node.on('input', function (msg) {
       if (!node.binance) {
         node.error(RED._("binance.errors.missing-conf"));
         return;
       }
-      binance.balance(function (err, balances) {
-        if (err) {
-          var errorMsg = parseApiError(err);
-          node.error(errorMsg);
-          node.status({fill: "red", shape: "ring", text: errorMsg});
-          return;
-        }
-        node.status({}); //clear status message
-        msg.payload = filterNonZeroBalance(balances);
-        node.send(msg);
+
+      updateBinanceConfig(node.binance, function () {
+        var binance = node.binance ? node.binance.binance: null;
+        binance.balance(function (err, balances) {
+          if (err) {
+            var errorMsg = parseApiError(err);
+            node.error(errorMsg);
+            node.status({fill: "red", shape: "ring", text: errorMsg});
+            return;
+          }
+          node.status({}); //clear status message
+          msg.payload = filterNonZeroBalance(balances);
+          node.send(msg);
+        });
       });
     });
   }
@@ -280,32 +285,32 @@ module.exports = function (RED) {
   function getOrdersNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
+    node.status({});
     node.binance = RED.nodes.getNode(n.binance);
-    node.binance = node.binance ? node.binance.binance: null;
     node.ticker = n.ticker;
 
     node.on('input', function (msg) {
-
       if (!node.binance) {
         node.error(RED._("binance.errors.missing-conf"));
         return;
       }
 
-      var tickerPair = node.ticker || msg.topic;
-      tickerPair = tickerPair ? tickerPair.toUpperCase(): false;
+      updateBinanceConfig(node.binance, function () {
+        var binance = node.binance ? node.binance.binance: null;
+        var tickerPair = node.ticker || msg.topic;
+        tickerPair = tickerPair ? tickerPair.toUpperCase(): false;
 
-      console.log(node.binance.options())
-
-      node.binance.openOrders(tickerPair, function (err, openOrders) {
-        if (err) {
-          var errorMsg = parseApiError(err);
-          node.error(errorMsg);
-          node.status({fill: "red", shape: "ring", text: errorMsg});
-          return;
-        }
-        node.status({}); //clear status message
-        msg.payload = openOrders;
-        node.send(msg);
+        binance.openOrders(tickerPair, function (err, openOrders) {
+          if (err) {
+            var errorMsg = parseApiError(err);
+            node.error(errorMsg);
+            node.status({fill: "red", shape: "ring", text: errorMsg});
+            return;
+          }
+          node.status({}); //clear status message
+          msg.payload = openOrders;
+          node.send(msg);
+        });
       });
     });
   }
@@ -313,6 +318,7 @@ module.exports = function (RED) {
   function cancelOrdersNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
+    node.status({});
     node.binance = RED.nodes.getNode(n.binance);
     node.ticker = n.ticker;
 
@@ -321,24 +327,31 @@ module.exports = function (RED) {
         node.error(RED._("binance.errors.missing-conf"));
         return;
       }
-      if (!msg.topic && !node.ticker) {
-        node.error(RED._("binance.errors.missing-ticker"));
-        node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-ticker-status")});
-        return;
-      }
-      var tickerPair = node.ticker || msg.topic;
-      tickerPair = tickerPair.toUpperCase();
 
-      binance.cancelOrders(tickerPair, function (err, resp) {
-        if (err) {
-          var errorMsg = parseApiError(err);
-          node.error(errorMsg);
-          node.status({fill: "red", shape: "ring", text: errorMsg});
+      updateBinanceConfig(node.binance, function () {
+        if (!msg.topic && !node.ticker) {
+          node.error(RED._("binance.errors.missing-ticker"));
+          node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-ticker-status")});
           return;
         }
-        node.status({}); //clear status message
-        msg.payload = resp;
-        node.send(msg);
+
+        var binance = node.binance ? node.binance.binance: null;
+        var tickerPair = node.ticker || msg.topic;
+        tickerPair = tickerPair.toUpperCase();
+
+        // NOTE: will throw exception when bad api credentials are supplied
+        // -- https://github.com/binance-exchange/node-binance-api/issues/117
+        binance.cancelOrders(tickerPair, function (err, resp) {
+          if (err) {
+            var errorMsg = parseApiError(err);
+            node.error(errorMsg);
+            node.status({fill: "red", shape: "ring", text: errorMsg});
+            return;
+          }
+          node.status({}); //clear status message
+          msg.payload = resp;
+          node.send(msg);
+        });
       });
     });
   }
@@ -346,6 +359,7 @@ module.exports = function (RED) {
   function getTradeHistoryNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
+    node.status({});
     node.binance = RED.nodes.getNode(n.binance);
     node.ticker = n.ticker;
 
@@ -353,12 +367,17 @@ module.exports = function (RED) {
       if (!node.binance) {
         node.error(RED._("binance.errors.missing-conf"));
         return;
+      } else {
+        updateBinanceConfig(node.binance);
       }
+
       if (!msg.topic && !node.ticker) {
         node.error(RED._("binance.errors.missing-ticker"));
         node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-ticker-status")});
         return;
       }
+
+      var binance = node.binance ? node.binance.binance: null;
       var tickerPair = node.ticker || msg.topic;
       tickerPair = tickerPair.toUpperCase();
 
@@ -379,6 +398,7 @@ module.exports = function (RED) {
   function buyNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
+    node.status({});
     node.binance = RED.nodes.getNode(n.binance);
     node.ticker = n.ticker;
     node.quantity = n.quantity;
@@ -390,38 +410,44 @@ module.exports = function (RED) {
         node.error(RED._("binance.errors.missing-conf"));
         return;
       }
-      var tickerPair = node.ticker || msg.topic;
-      var quantity = node.quantity || msg.payload.quantity;
-      var price = node.price || msg.payload.price;
-      var orderType = node.orderType;
 
-      if (validateOrderFields(RED, node, tickerPair, orderType, quantity, price) !== true) {
-        return;
-      }
+      updateBinanceConfig(node.binance, function () {
+        var binance = node.binance ? node.binance.binance: null;
+        var tickerPair = node.ticker || msg.topic;
+        var quantity = node.quantity || msg.payload.quantity;
+        var price = node.price || msg.payload.price;
+        var orderType = node.orderType;
 
-      tickerPair = tickerPair.toUpperCase();
-      price = parseFloat(price); // parseFloat will round to nearest 8th decimal place
-      quantity = parseFloat(quantity);
-
-      binance.buy(tickerPair, quantity, price, {
-        type: orderType // LIMIT, MARKET
-      }, function (err, resp) {
-        if (err) {
-          var errorMsg = parseApiError(err);
-          node.error(errorMsg);
-          node.status({fill: "red", shape: "ring", text: errorMsg});
+        if (validateOrderFields(RED, node, tickerPair, orderType, quantity, price) !== true) {
           return;
         }
-        node.status({}); //clear status message
-        msg.payload = resp;
-        node.send(msg);
+
+        tickerPair = tickerPair.toUpperCase();
+        price = parseFloat(price); // parseFloat will round to nearest 8th decimal place
+        quantity = parseFloat(quantity);
+
+        binance.buy(tickerPair, quantity, price, {
+          type: orderType // LIMIT, MARKET
+        }, function (err, resp) {
+          if (err) {
+            var errorMsg = parseApiError(err);
+            node.error(errorMsg);
+            node.status({fill: "red", shape: "ring", text: errorMsg});
+            return;
+          }
+          node.status({}); //clear status message
+          msg.payload = resp;
+          node.send(msg);
+        });
       });
+
     });
   }
 
   function sellNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
+    node.status({});
     node.binance = RED.nodes.getNode(n.binance);
     node.ticker = n.ticker;
     node.quantity = n.quantity;
@@ -433,31 +459,35 @@ module.exports = function (RED) {
         node.error(RED._("binance.errors.missing-conf"));
         return;
       }
-      var tickerPair = node.ticker || msg.topic;
-      var quantity = node.quantity || msg.payload.quantity;
-      var price = node.price || msg.payload.price;
-      var orderType = node.orderType;
 
-      if (validateOrderFields(RED, node, tickerPair, orderType, quantity, price) !== true) {
-        return;
-      }
+      updateBinanceConfig(node.binance, function () {
+        var binance = node.binance ? node.binance.binance: null;
+        var tickerPair = node.ticker || msg.topic;
+        var quantity = node.quantity || msg.payload.quantity;
+        var price = node.price || msg.payload.price;
+        var orderType = node.orderType;
 
-      tickerPair = tickerPair.toUpperCase();
-      price = parseFloat(price); // parseFloat will round to nearest 8th decimal place
-      quantity = parseFloat(quantity);
-
-      binance.sell(tickerPair, quantity, price, {
-        type: orderType // LIMIT, MARKET
-      }, function (err, resp) {
-        if (err) {
-          var errorMsg = parseApiError(err);
-          node.error(errorMsg);
-          node.status({fill: "red", shape: "ring", text: errorMsg});
+        if (validateOrderFields(RED, node, tickerPair, orderType, quantity, price) !== true) {
           return;
         }
-        node.status({}); //clear status message
-        msg.payload = resp;
-        node.send(msg);
+
+        tickerPair = tickerPair.toUpperCase();
+        price = parseFloat(price); // parseFloat will round to nearest 8th decimal place
+        quantity = parseFloat(quantity);
+
+        binance.sell(tickerPair, quantity, price, {
+          type: orderType // LIMIT, MARKET
+        }, function (err, resp) {
+          if (err) {
+            var errorMsg = parseApiError(err);
+            node.error(errorMsg);
+            node.status({fill: "red", shape: "ring", text: errorMsg});
+            return;
+          }
+          node.status({}); //clear status message
+          msg.payload = resp;
+          node.send(msg);
+        });
       });
     });
   }

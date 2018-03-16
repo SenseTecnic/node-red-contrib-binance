@@ -9,9 +9,7 @@ https://www.npmjs.com/package/node-binance-api
 
 Nodes supported are a subset of the available functions in the API
 
-### Public endpoints
-
-#### getPrice
+### getPrice
 
 Getting latest price of a symbol.
 
@@ -24,7 +22,7 @@ Output:
 - current price
 
 
-#### getAllPrices
+### getAllPrices
 
 Getting latest price of all symbols.
 
@@ -36,7 +34,7 @@ Output:
 
 - {object} map of all available ticker pair and their current prices
 
-#### getBookTicker
+### getBookTicker
 
 Getting bid/ask prices for a symbol.
 
@@ -48,7 +46,7 @@ Output:
 
 - {object} info on latest book price
 
-#### getDayStats
+### getDayStats
 
 Get 24hr ticker price change statistics for a symbol.
 
@@ -60,7 +58,7 @@ Output:
 
 - {object} info latest 24 hour stats
 
-#### getCandlesticks
+### getCandlesticks
 
 Get Kline/candlestick data for a symbol.
 
@@ -96,10 +94,7 @@ i.e.
 ]
 ```
 
-### Nodes that require account API credentials
-
-
-#### getOrders
+### getOrders
 
 Get open orders for a symbol.
 
@@ -112,7 +107,7 @@ Output:
 
 - {Array} list of current orders
 
-#### getBalance
+### getBalance
 
 Get list of current balances.
 
@@ -125,7 +120,7 @@ Output:
 
 - {object} map of ticker symbols and quantity on the account
 
-#### cancelOrders
+### cancelOrders
 
 Cancel all open orders of a ticker pair.
 
@@ -138,7 +133,7 @@ Output:
 
 - {object} binance API response
 
-#### getTradeHistory
+### getTradeHistory
 
 Get trade history of a ticker pair.
 
@@ -151,7 +146,7 @@ Output:
 
 - {array} list of previous orders
 
-#### buy
+### buy
 
 Create a limit or market buy order.
 
@@ -167,7 +162,7 @@ Output:
 
 - {object} binance API response
 
-#### sell
+### sell
 
 Create a limit or market sell order.
 
@@ -182,7 +177,6 @@ Input:
 Output:
 
 - {object} binance API response
-
 
 
 ## Response and error handling

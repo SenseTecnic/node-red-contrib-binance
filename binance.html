@@ -28,7 +28,27 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-credentials">
-  <p>TODO</p>
+  <h1>Binance Credentials</h1>
+  <p>API credential setup.</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      API key
+      <span class="property-type">string</span>
+    </dt>
+    <dd>Binance account API key</dd>
+    <dt>
+      API secret
+      <span class="property-type">string</span>
+    </dt>
+    <dd>Binance account API secret</dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Binance API credentials can be obtained from <a href="https://www.binance.com/userCenter/createApi.html" target="_blank">https://www.binance.com/userCenter/createApi.html</a> after logging into your Binance account.</p>
+  <p><strong>Read Info</strong> privilege required to access account records.</p>
+  <p><strong>Enable trading</strong> privilege required only for buy/sell nodes.</p>
+  <p>API credential are saved as Node-RED credential nodes inside the (optionally) encrypted <code>flows_cred.json</code> file.</p>
+  <p><a href="https://nodered.org/docs/creating-nodes/credentials" target="_blank">More details here</a></p>
 </script>
 
 <script type="text/javascript">
@@ -73,7 +93,27 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-price">
-  <p>TODO</p>
+  <h1>getPrice</h1>
+  <p>Gets the latest price of a ticker pair (symbol)</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">string</span>
+    </dt>
+    <dd>Current price of the ticker pair.</dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#symbol-price-ticker">GET /api/v3/ticker/price</a></p>
 </script>
 
 <script type="text/javascript">
@@ -109,7 +149,19 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-all-prices">
-  <p>TODO</p>
+  <h1>getAllPrices</h1>
+  <p>Gets all ticker pair prices on the exchange</p>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">object</span>
+    </dt>
+    <dd>Returns map of all prices with ticker pairs and their corresponding price.</dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#symbol-price-ticker">GET /api/v3/ticker/price</a></p>
 </script>
 
 <script type="text/javascript">
@@ -144,7 +196,37 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-book-ticker">
-  <p>TODO</p>
+  <h1>getBookTicker</h1>
+  <p>Gets the latest book order of a ticker pair (symbol)</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">object</span>
+    </dt>
+    <dd>Current bid price, bid quantity, asking price, asking quantity of the target ticker pair.
+      <p>
+        Example:
+        <code style="white-space: pre-wrap; display: block; font-size: 0.85em;">{
+  "bidPrice": "4.00000000",
+  "bidQty": "431.00000000",
+  "askPrice": "4.00000200",
+  "askQty": "9.00000000"
+}</code>
+      </p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#symbol-order-book-ticker">GET /api/v3/ticker/bookTicker</a></p>
 </script>
 
 <script type="text/javascript">
@@ -185,7 +267,30 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-day-stats">
-  <p>TODO</p>
+  <h1>getDayStats</h1>
+  <p>Gets the latest book order of a ticker pair (symbol)</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      Ticker pair (optional)
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank.</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">object | array</span>
+    </dt>
+    <dd>
+      <p>If ticker pair was provided, returns map of the latest 24 hour stats for the target ticker pair.</p>
+      <p>If no ticker pair was provided, returns an array of maps of all ticker pairs and their last 24 hour stats.</p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#24hr-ticker-price-change-statistics">GET /api/v1/ticker/24hr</a></p>
 </script>
 
 <script type="text/javascript">
@@ -256,7 +361,72 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-candlesticks">
-  <p>TODO</p>
+  <h1>getCandleSticks</h1>
+  <p>Get Kline/candlestick data for a ticker pair.</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+    <dt>
+      Time interval
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The time interval of each candle stick data point returned.</dd>
+    <dt>
+      Limit (optional)
+      <span class="property-type">integer</span>
+    </dt>
+    <dd>The maximum number of data points to return. (Default: 100, Max: 500)</dd>
+    <dt>
+      Start time (optional)
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The starting time of the candle stick data. Click on the input to use the datepicker.</dd>
+    <dt>
+      End time (optional)
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The ending time of the candle stick data. Click on the input to use the datepicker.</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">array</span>
+    </dt>
+    <dd>Returns array of arrays of candlestick values.
+      <p>
+        Example:
+        <code style="white-space: pre-wrap; display: block; font-size: 0.85em;">[
+  [
+    1499040000000,// Open time
+    "0.01634790", // Open
+    "0.80000000", // High
+    "0.01575800", // Low
+    "0.01577100", // Close
+    "148976",     // Volume
+    149964479,    // Close time
+    // Quote asset volume
+    "2434.1905",
+    // Number of trades
+    308,
+    // Taker buy base asset volume
+    "1756.8747",
+    // Taker buy quote asset volume
+    "28.4664",
+    "0" // Ignore
+  ],
+  ...
+]</code>
+      </p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#klinecandlestick-data">GET /api/v1/klines</a></p>
 </script>
 
 <script type="text/javascript">
@@ -331,7 +501,40 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-balance">
-  <p>TODO</p>
+  <h1>getBalance</h1>
+  <p>Gets the latest balance of a Binance account.</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      API credentials
+      <span class="property-type">binance-credentials</span>
+    </dt>
+    <dd>API key and API secret for the Binance account.</dt>
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">object</span>
+    </dt>
+    <dd>Map of ticker symbols and the corresponding quantity on the target account.
+      <p>
+        Example:
+        <code style="white-space: pre-wrap; display: block; font-size: 0.85em;">{
+  "BNB": "4.00000000",
+  "BTC": "0.20000000"
+}</code>
+      </p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-information-user_data">GET /api/v3/account</a></p>
 </script>
 
 <script type="text/javascript">
@@ -371,7 +574,52 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-orders">
-  <p>TODO</p>
+  <h1>getOrders</h1>
+  <p>Gets all open orders of a ticker pair (symbol) on the account.</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      API credentials
+      <span class="property-type">binance-credentials</span>
+    </dt>
+    <dd>API key and API secret for the Binance account.</dt>
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">array</span>
+    </dt>
+    <dd>Array of order objects.
+      <p>
+        Example:
+        <code style="white-space: pre-wrap; display: block; font-size: 0.85em;">{
+  "symbol":"BNBBTC",
+  "orderId":88888888,
+  "clientOrderId":"web_xxx",
+  "price":"0.00090000",
+  "origQty":"1.50000000",
+  "executedQty":"0.00000000",
+  "status":"NEW",
+  "timeInForce":"GTC",
+  "type":"LIMIT",
+  "side":"BUY",
+  "stopPrice":"0.00000000",
+  "icebergQty":"0.00000000",
+  "time":1521488010229,
+  "isWorking":true
+}</code>
+      </p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#current-open-orders-user_data">GET /api/v3/openOrders</a></p>
 </script>
 
 <script type="text/javascript">
@@ -416,7 +664,42 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-cancel-orders">
-  <p>TODO</p>
+  <h1>cancelOrders</h1>
+  <p>Cancel all open orders of a ticker pair.</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      API credentials
+      <span class="property-type">binance-credentials</span>
+    </dt>
+    <dd>API key and API secret for the Binance account.</dt>
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">object | array</span>
+    </dt>
+    <dd>Returns canceled orders. Nothing if no open orders are found for the ticker pair.
+      <p>
+        Example:
+        <code style="white-space: pre-wrap; display: block; font-size: 0.85em;">{
+  "symbol":"BNBBTC",
+  "origClientOrderId":"web_xxx",
+  "orderId":88888888,
+  "clientOrderId":"xxxxxx"
+}</code>
+      </p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#cancel-order-trade">DELETE /api/v3/order </a></p>
 </script>
 
 <script type="text/javascript">
@@ -461,7 +744,51 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-get-trade-history">
-  <p>TODO</p>
+  <h1>getTradeHistory</h1>
+  <p>Get account trade history of a ticker pair.</p>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      API credentials
+      <span class="property-type">binance-credentials</span>
+    </dt>
+    <dd>API key and API secret for the Binance account.</dt>
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">array</span>
+    </dt>
+    <dd>List of previously completed orders for the ticker pair.
+      <p>
+        Example:
+        <code style="white-space: pre-wrap; display: block; font-size: 0.85em;">[
+  {
+    "id":8888888,
+    "orderId":88888888,
+    "price":"0.00062196",
+    "qty":"2.00000000",
+    "commission":"0.00100000",
+    "commissionAsset":"BNB",
+    "time":1514762376376,
+    "isBuyer":true,
+    "isMaker":false,
+    "isBestMatch":true
+  },
+  ...
+]</code>
+      </p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#recent-trades-list">GET /api/v1/trades</a></p>
 </script>
 
 <script type="text/javascript">
@@ -521,7 +848,67 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-buy">
-  <p>TODO</p>
+  <h1>buy (limit/market)</h1>
+  <p>Create a limit or market buy order for a ticker pair. This node requires <strong>enable trading</strong> API privilege.</p>
+  <h2><strong>IMPORTANT</strong></h2>
+  <p style="font-style: italic;">Orders will be placed with the user specified parameters on node input. There will be no secondary confirmation. Orders on the exchange cannot be reversed once they have been completed/satisfied.</p>
+  <h2 style="font-weight: bold; margin-bottom: 15px 0; padding: 5px; border: 1px dashed #AD1625; text-align: center; color: #fff; background-color: #d91c2f">USE AT YOUR OWN RISK</h2>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      API credentials
+      <span class="property-type">binance-credentials</span>
+    </dt>
+    <dd>API key and API secret for the Binance account.</dt>
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+    <dt>
+      Order type
+      <span class="property-type">string</span>
+    </dt>
+    <dd>Whether to place a LIMIT or MARKET order. MARKET orders use the latest market price.</dd>
+    <dt>
+      Quantity
+      <span class="property-type">float</span>
+    </dt>
+    <dd>The amount to purchase.</dd>
+    <dt>
+      Price
+      <span class="property-type">float</span>
+    </dt>
+    <dd>The price of the LIMIT order. (Not applicable in MARKET orders)</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">object</span>
+    </dt>
+    <dd>Object containing info of the order placed.
+      <p>
+        Example:
+        <code style="white-space: pre-wrap; display: block; font-size: 0.85em;">{
+  "symbol":"BNBBTC",
+  "orderId":88888888,
+  "clientOrderId":"xxxxxxxx",
+  "transactTime":1521488930316,
+  "price":"0.00050000",
+  "origQty":"2.00000000",
+  "executedQty":"0.00000000",
+  "status":"NEW",
+  "timeInForce":"GTC",
+  "type":"LIMIT",
+  "side":"BUY"
+}</code>
+      </p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#new-order--trade">POST /api/v3/order</a></p>
 </script>
 
 <script type="text/javascript">
@@ -598,7 +985,67 @@
 </script>
 
 <script type="text/x-red" data-help-name="binance-sell">
-  <p>TODO</p>
+  <h1>sell (limit/market)</h1>
+  <p>Create a limit or market sell order for a ticker pair. This node requires <strong>enable trading</strong> API privilege.</p>
+  <h2><strong>IMPORTANT</strong></h2>
+  <p style="font-style: italic;">Orders will be placed with the user specified parameters on node input. There will be no secondary confirmation. Orders on the exchange cannot be reversed once they have been completed/satisfied.</p>
+  <h2 style="font-weight: bold; margin-bottom: 15px 0; padding: 5px; border: 1px dashed #AD1625; text-align: center; color: #fff; background-color: #d91c2f">USE AT YOUR OWN RISK</h2>
+  <h3>Input</h3>
+  <dl class="message-properties">
+    <dt>
+      API credentials
+      <span class="property-type">binance-credentials</span>
+    </dt>
+    <dd>API key and API secret for the Binance account.</dt>
+    <dt>
+      Ticker pair
+      <span class="property-type">string</span>
+    </dt>
+    <dd>The target ticker pair (i.e. BNBBTC). This can be passed in by using the <strong>msg.topic</strong> property and leaving the form input blank</dd>
+    <dt>
+      Order type
+      <span class="property-type">string</span>
+    </dt>
+    <dd>Whether to place a LIMIT or MARKET order. MARKET orders use the latest market price.</dd>
+    <dt>
+      Quantity
+      <span class="property-type">float</span>
+    </dt>
+    <dd>The amount to sell.</dd>
+    <dt>
+      Price
+      <span class="property-type">float</span>
+    </dt>
+    <dd>The price of the LIMIT order. (Not applicable in MARKET orders)</dd>
+  </dl>
+  <h3>Ouput</h3>
+  <dl class="message-properties">
+    <dt>
+      msg.payload
+      <span class="property-type">object</span>
+    </dt>
+    <dd>Object containing info of the order placed.
+      <p>
+        Example:
+        <code style="white-space: pre-wrap; display: block; font-size: 0.85em;">{
+  "symbol":"BNBBTC",
+  "orderId":88888888,
+  "clientOrderId":"xxxxxxxx",
+  "transactTime":1521488930316,
+  "price":"0.00050000",
+  "origQty":"2.00000000",
+  "executedQty":"0.00000000",
+  "status":"NEW",
+  "timeInForce":"GTC",
+  "type":"LIMIT",
+  "side":"SELL"
+}</code>
+      </p>
+    </dd>
+  </dl>
+  <h3>Details:</h3>
+  <p>Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. For more details see the <a href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md">Binance REST API documentation</a>.</p>
+  <p>API endpoint: <a target="_blank" href="https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#new-order--trade">POST /api/v3/order</a></p>
 </script>
 
 <script type="text/javascript">

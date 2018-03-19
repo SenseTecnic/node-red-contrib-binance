@@ -5,6 +5,12 @@ A Node-RED node wrapper to make API calls to the Binance exchange. The back-end 
 https://github.com/binance-exchange/node-binance-api
 https://www.npmjs.com/package/node-binance-api
 
+**IMPORTANT**
+
+For buy/sell nodes, orders will be placed with the user specified parameters on node input. There will be no secondary confirmation. Orders on the exchange cannot be reversed once they have been completed/satisfied.
+
+**USE AT YOUR OWN RISK**
+
 ## Supported Functions
 
 Nodes supported are a subset of the available functions in the API
@@ -150,6 +156,8 @@ Output:
 
 Create a limit or market buy order.
 
+USE AT YOUR OWN RISK
+
 Input:
 
 - API credentials - *required*
@@ -164,7 +172,9 @@ Output:
 
 ### sell
 
-Create a limit or market sell order.
+Create a limit or market sell order. 
+
+USE AT YOUR OWN RISK
 
 Input:
 
@@ -181,7 +191,8 @@ Output:
 
 ## Response and error handling
 
-Responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. 
+Most responses are directly passed through from the API to the output payload. Errors are directed to the nodes status message as well as the debug console. 
 
 For more details on the responses please see the official Binance REST API documentation at:
 https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md
+

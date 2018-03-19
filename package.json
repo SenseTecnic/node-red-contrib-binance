@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-binance",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Node-RED node wrapper to make API calls to the Binance exchange. The NodeJS library used for communicating with Binance is a version of https://github.com/binance-exchange/node-binance-api, winner of the official Binance API competition",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,7 +30,18 @@
   },
   "node-red": {
     "nodes": {
-      "binance": "binance.js"
+      "binance-credentials": "binance.js",
+      "binance-get-price": "binance.js",
+      "binance-get-all-prices": "binance.js",
+      "binance-get-book-ticker": "binance.js",
+      "binance-get-day-stats": "binance.js",
+      "binance-get-candlesticks": "binance.js",
+      "binance-get-balance": "binance.js",
+      "binance-get-orders": "binance.js",
+      "binance-cancel-orders": "binance.js",
+      "binance-get-trade-history": "binance.js",
+      "binance-buy": "binance.js",
+      "binance-sell": "binance.js"
     }
   }
 }

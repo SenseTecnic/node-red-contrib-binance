@@ -1,6 +1,6 @@
 # node-red-contrib-binance
 
-A Node-RED node wrapper to make API calls to the Binance exchange. The back-end node library used to communicate with the Binance exchange is one of the winner of the Binance API Competition. See: https://support.binance.com/hc/en-us/articles/115002103732-First-Winner-of-Binance-API-Competition.
+A [Node-RED](https://nodered.org) node wrapper to make API calls to the Binance exchange. The back-end node library used to communicate with the Binance exchange is one of the winner of the Binance API Competition. See: https://support.binance.com/hc/en-us/articles/115002103732-First-Winner-of-Binance-API-Competition.
 
 github: https://github.com/binance-exchange/node-binance-api
 
@@ -11,6 +11,12 @@ npm: https://www.npmjs.com/package/node-binance-api
 For buy/sell nodes, orders will be placed with the user specified parameters on node input. There will be no secondary confirmation. Orders on the exchange cannot be reversed once they have been completed/satisfied.
 
 **USE AT YOUR OWN RISK**
+
+## Installation
+
+1. Install [Node-RED](https://nodered.org)
+2. Go to Node-RED user directory (default: `/home/{USER}/.node-red`)
+3. Run: `npm install node-red-contrib-binance`
 
 ## Supported Functions
 

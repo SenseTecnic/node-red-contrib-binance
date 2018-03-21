@@ -30,39 +30,39 @@ function filterNonZeroBalance(balances) {
   return filteredMap;
 }
 
-function validateOrderFields(RED, node, tickerPair, orderType, quantity, price) {
+function validateOrderFields(RED, node, msg, tickerPair, orderType, quantity, price) {
   if (!tickerPair) {
-    node.error(RED._("binance.errors.missing-ticker"));
+    node.error(RED._("binance.errors.missing-ticker"), msg);
     node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-ticker-status")});
     return false;
   }
 
   if (!quantity) {
-    node.error(RED._("binance.errors.missing-quantity"));
+    node.error(RED._("binance.errors.missing-quantity"), msg);
     node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-quantity")});
     return false;
   }
 
   if (!price && orderType !== ORDER_TYPES.market) {
-    node.error(RED._("binance.errors.missing-price"));
+    node.error(RED._("binance.errors.missing-price"), msg);
     node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-price")});
     return false;
   }
 
   if (isNaN(quantity)) {
-    node.error(RED._("binance.errors.quantity-not-a-number"));
+    node.error(RED._("binance.errors.quantity-not-a-number"), msg);
     node.status({fill: "red", shape: "ring", text: RED._("binance.errors.quantity-not-a-number")});
     return false;
   }
 
   if (isNaN(price) && orderType !== ORDER_TYPES.market) {
-    node.error(RED._("binance.errors.price-not-a-number"));
+    node.error(RED._("binance.errors.price-not-a-number"), msg);
     node.status({fill: "red", shape: "ring", text: RED._("binance.errors.price-not-a-number")});
     return false;
   }
 
   if (orderType !== ORDER_TYPES.limit && orderType !== ORDER_TYPES.market) {
-    node.error(RED._("binance.errors.invalid-order-type"));
+    node.error(RED._("binance.errors.invalid-order-type"), msg);
     node.status({fill: "red", shape: "ring", text: RED._("binance.errors.invalid-order-type-status")});
     return false;
   }
@@ -137,7 +137,7 @@ module.exports = function (RED) {
       binance.prices(function (err, tickers) {
         if (err) {
           var errorMsg = parseApiError(err);
-          node.error(errorMsg);
+          node.error(errorMsg, msg);
           node.status({fill: "red", shape: "ring", text: errorMsg});
           return;
         }
@@ -158,7 +158,7 @@ module.exports = function (RED) {
     node.on('input', function (msg) {
       // supply ticker pair either through input form or msg topic
       if (!msg.topic && !node.ticker) {
-        node.error(RED._("binance.errors.missing-ticker"));
+        node.error(RED._("binance.errors.missing-ticker"), msg);
         node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-ticker-status")});
         return;
       }
@@ -168,7 +168,7 @@ module.exports = function (RED) {
       binance.bookTickers(tickerPair, function (err, ticker) {
         if (err) {
           var errorMsg = parseApiError(err);
-          node.error(errorMsg);
+          node.error(errorMsg, msg);
           node.status({fill: "red", shape: "ring", text: errorMsg});
           return;
         }
@@ -194,7 +194,7 @@ module.exports = function (RED) {
       binance.prevDay(tickerPair, function (err, ticker) {
         if (err) {
           var errorMsg = parseApiError(err);
-          node.error(errorMsg);
+          node.error(errorMsg, msg);
           node.status({fill: "red", shape: "ring", text: errorMsg});
           return;
         }
@@ -220,28 +220,34 @@ module.exports = function (RED) {
 
       // supply ticker pair either through input form or msg topic
       if (!msg.topic && !node.ticker) {
-        node.error(RED._("binance.errors.missing-ticker"));
+        node.error(RED._("binance.errors.missing-ticker"), msg);
         node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-ticker-status")});
         return;
       }
 
-      if (!node.interval) {
-        node.error(RED._("binance.errors.missing-interval"));
+      if (!node.interval && !msg.payload && !msg.payload.interval) {
+        node.error(RED._("binance.errors.missing-interval"), msg);
         node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-interval")});
       }
 
       var tickerPair = node.ticker || msg.topic;
       tickerPair = tickerPair.toUpperCase();
 
-      var options = {};
-      options.startTime = node.startTime ? (new Date(node.startTime)).getTime(): undefined;
-      options.endTime = node.endTime ? (new Date(node.endTime)).getTime(): undefined;
-      options.limit = node.limit ? node.limit: undefined;
+      var interval = msg.payload.interval || node.interval;
+      var limit = msg.payload.limit ||  node.limit;
 
-      binance.candlesticks(tickerPair, node.interval, function (err, ticker) {
+      var startTime = msg.payload.startTime || node.startTime;
+      var endTime = msg.payload.endTime || node.endTime;
+
+      var options = {};
+      options.startTime = startTime ? (new Date(startTime)).getTime(): undefined;
+      options.endTime = endTime ? (new Date(endTime)).getTime(): undefined;
+      options.limit = limit ? limit: undefined;
+
+      binance.candlesticks(tickerPair, interval, function (err, ticker) {
         if (err) {
           var errorMsg = parseApiError(err);
-          node.error(errorMsg);
+          node.error(errorMsg, msg);
           node.status({fill: "red", shape: "ring", text: errorMsg});
           return;
         }
@@ -261,7 +267,7 @@ module.exports = function (RED) {
 
     node.on('input', function (msg) {
       if (!node.binance) {
-        node.error(RED._("binance.errors.missing-conf"));
+        node.error(RED._("binance.errors.missing-conf"), msg);
         return;
       }
 
@@ -270,7 +276,7 @@ module.exports = function (RED) {
         binance.balance(function (err, balances) {
           if (err) {
             var errorMsg = parseApiError(err);
-            node.error(errorMsg);
+            node.error(errorMsg, msg);
             node.status({fill: "red", shape: "ring", text: errorMsg});
             return;
           }
@@ -291,7 +297,7 @@ module.exports = function (RED) {
 
     node.on('input', function (msg) {
       if (!node.binance) {
-        node.error(RED._("binance.errors.missing-conf"));
+        node.error(RED._("binance.errors.missing-conf"), msg);
         return;
       }
 
@@ -303,7 +309,7 @@ module.exports = function (RED) {
         binance.openOrders(tickerPair, function (err, openOrders) {
           if (err) {
             var errorMsg = parseApiError(err);
-            node.error(errorMsg);
+            node.error(errorMsg, msg);
             node.status({fill: "red", shape: "ring", text: errorMsg});
             return;
           }
@@ -324,13 +330,13 @@ module.exports = function (RED) {
 
     node.on('input', function (msg) {
       if (!node.binance) {
-        node.error(RED._("binance.errors.missing-conf"));
+        node.error(RED._("binance.errors.missing-conf"), msg);
         return;
       }
 
       updateBinanceConfig(node.binance, function () {
         if (!msg.topic && !node.ticker) {
-          node.error(RED._("binance.errors.missing-ticker"));
+          node.error(RED._("binance.errors.missing-ticker"), msg);
           node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-ticker-status")});
           return;
         }
@@ -344,7 +350,7 @@ module.exports = function (RED) {
         binance.cancelOrders(tickerPair, function (err, resp) {
           if (err) {
             var errorMsg = parseApiError(err);
-            node.error(errorMsg);
+            node.error(errorMsg, msg);
             node.status({fill: "red", shape: "ring", text: errorMsg});
             return;
           }
@@ -365,14 +371,14 @@ module.exports = function (RED) {
 
     node.on('input', function (msg) {
       if (!node.binance) {
-        node.error(RED._("binance.errors.missing-conf"));
+        node.error(RED._("binance.errors.missing-conf"), msg);
         return;
       } else {
         updateBinanceConfig(node.binance);
       }
 
       if (!msg.topic && !node.ticker) {
-        node.error(RED._("binance.errors.missing-ticker"));
+        node.error(RED._("binance.errors.missing-ticker"), msg);
         node.status({fill: "red", shape: "ring", text: RED._("binance.errors.missing-ticker-status")});
         return;
       }
@@ -384,7 +390,7 @@ module.exports = function (RED) {
       binance.trades(tickerPair, function (err, resp) {
         if (err) {
           var errorMsg = parseApiError(err);
-          node.error(errorMsg);
+          node.error(errorMsg, msg);
           node.status({fill: "red", shape: "ring", text: errorMsg});
           return;
         }
@@ -407,7 +413,7 @@ module.exports = function (RED) {
 
     node.on('input', function (msg) {
       if (!node.binance) {
-        node.error(RED._("binance.errors.missing-conf"));
+        node.error(RED._("binance.errors.missing-conf"), msg);
         return;
       }
 
@@ -418,7 +424,7 @@ module.exports = function (RED) {
         var price = node.price || msg.payload.price;
         var orderType = node.orderType;
 
-        if (validateOrderFields(RED, node, tickerPair, orderType, quantity, price) !== true) {
+        if (validateOrderFields(RED, node, msg, tickerPair, orderType, quantity, price) !== true) {
           return;
         }
 
@@ -431,7 +437,7 @@ module.exports = function (RED) {
         }, function (err, resp) {
           if (err) {
             var errorMsg = parseApiError(err);
-            node.error(errorMsg);
+            node.error(errorMsg, msg);
             node.status({fill: "red", shape: "ring", text: errorMsg});
             return;
           }
@@ -456,7 +462,7 @@ module.exports = function (RED) {
 
     node.on('input', function (msg) {
       if (!node.binance) {
-        node.error(RED._("binance.errors.missing-conf"));
+        node.error(RED._("binance.errors.missing-conf"), msg);
         return;
       }
 
@@ -467,7 +473,7 @@ module.exports = function (RED) {
         var price = node.price || msg.payload.price;
         var orderType = node.orderType;
 
-        if (validateOrderFields(RED, node, tickerPair, orderType, quantity, price) !== true) {
+        if (validateOrderFields(RED, node, msg, tickerPair, orderType, quantity, price) !== true) {
           return;
         }
 
@@ -480,7 +486,7 @@ module.exports = function (RED) {
         }, function (err, resp) {
           if (err) {
             var errorMsg = parseApiError(err);
-            node.error(errorMsg);
+            node.error(errorMsg, msg);
             node.status({fill: "red", shape: "ring", text: errorMsg});
             return;
           }

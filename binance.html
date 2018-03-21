@@ -374,7 +374,7 @@
       Time interval
       <span class="property-type">string</span>
     </dt>
-    <dd>The time interval of each candle stick data point returned.</dd>
+    <dd>The time interval of each candle stick data point returned. This field can also be passed it using <strong>msg.payload.interval</strong>. Doing so will override value set in the node input form. Options are: 1m, 3m, 5m, 15m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M.</dd>
     <dt>
       Limit (optional)
       <span class="property-type">integer</span>
@@ -384,12 +384,12 @@
       Start time (optional)
       <span class="property-type">string</span>
     </dt>
-    <dd>The starting time of the candle stick data. Click on the input to use the datepicker.</dd>
+    <dd>The starting time of the candle stick data. Click on the input to use the datepicker. This field can also be passed it using <strong>msg.payload.startTime</strong>. Doing so will override value set in the node input form. String passed in must be a <a href="https://www.w3schools.com/js/js_date_formats.asp" target="_blank">valid JS date string</a>.</dd>
     <dt>
       End time (optional)
       <span class="property-type">string</span>
     </dt>
-    <dd>The ending time of the candle stick data. Click on the input to use the datepicker.</dd>
+    <dd>The ending time of the candle stick data. Click on the input to use the datepicker. This field can also be passed it using <strong>msg.payload.endTime</strong>. Doing so will override value set in the node input form. String passed in must be a <a href="https://www.w3schools.com/js/js_date_formats.asp" target="_blank">valid JS date string</a>.</dd>
   </dl>
   <h3>Ouput</h3>
   <dl class="message-properties">

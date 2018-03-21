@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-binance",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A Node-RED node wrapper to make API calls to the Binance exchange. The NodeJS library used for communicating with Binance is a version of https://github.com/binance-exchange/node-binance-api, winner of the official Binance API competition",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

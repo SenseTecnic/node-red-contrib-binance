@@ -61,13 +61,11 @@
   RED.nodes.registerType('binance-credentials', {
     category: 'config',
     defaults: {
-      name: {value: ""},
-      apiKey: {value: "", required: true},
-      apiSecret: {value: "", required: true}
+      name: {value: ""}
     },
     credentials: {
-      apiKey: {type: "password"},
-      apiSecret: {type: "password"}
+      apiKey: {type: "password", required: true},
+      apiSecret: {type: "password", required: true}
     },
     inputs: 0,
     outputs: 0,

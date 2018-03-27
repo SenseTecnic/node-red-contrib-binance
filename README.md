@@ -12,6 +12,10 @@ For buy/sell nodes, orders will be placed with the user specified parameters on 
 
 **USE AT YOUR OWN RISK**
 
+## Tutorials
+
+[FRED Cloud Node-RED and cryptocurrencies](http://developers.sensetecnic.com/article/fred-cloud-node-red-and-cryptocurrencies)
+
 ## Installation
 
 1. Install [Node-RED](https://nodered.org)
